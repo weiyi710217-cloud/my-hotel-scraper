@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東京四人房飯店搜尋器 (2027/01/30 - 01/31)</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: #f8f9fa; 
+            color: #333; 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 20px; 
+        }
+        h1 { color: #0073e6; font-size: 24px; }
+        .info { 
+            background: #eef2f7; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            line-height: 1.6;
+        }
+        .hotel-card { 
+            background: white; 
+            padding: 16px; 
+            margin-bottom: 12px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .hotel-name { font-weight: bold; font-size: 16px; }
+        .hotel-price { color: #d9534f; font-weight: bold; font-size: 18px; }
+        .loading { text-align: center; color: #666; margin-top: 40px; font-size: 16px; }
+        .error { color: #d9534f; background: #fdf2f2; padding: 15px; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <h1>🗼 東京四人房飯店即時盤點</h1>
+    <div class="info">
+        📅 入住日期：<strong>2027-01-30 ~ 2027-01-31</strong> (1晚)<br>
+        👥 房型：<strong>4 人房</strong><br>
+        🔄 資料來源：GitHub Actions 自動爬蟲
+    </div>
+
+    <div id="hotel-list" class="loading">正在載入飯店資料...</div>
+
+    <script>
+        fetch('hotels.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('找不到 hotels.json 檔案');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('hotel-list');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="error">目前沒有飯店資料，可能爬蟲尚未執行或尚未成功產出資料。</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                data.forEach(hotel => {
+                    const card = document.createElement('div');
+                    card.className = 'hotel-card';
+                    card.innerHTML = `
+                        <div class="hotel-name">${hotel.name}</div>
+                        <div class="hotel-price">${hotel.price}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => {
+                document.getElementById('hotel-list').innerHTML = `
+                    <div class="error">
+                        無法讀取 <code>hotels.json</code> 檔案。<br>
+                        請確認 GitHub Actions 是否已成功執行並將 <code>hotels.json</code> 推送到倉庫中。
+                    </div>
+                `;
+            });
+    </script>
+
+</body>
+</html>
