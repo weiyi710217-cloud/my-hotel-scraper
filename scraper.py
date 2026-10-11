@@ -30,7 +30,7 @@ def run_agoda_scraper():
         # checkIn=2027-01-30
         # checkOut=2027-01-31
         # adults=4 (成人4人)
-        target_url = "https://www.agoda.com/zh-tw/search?city=14534&checkIn=2027-01-30&checkOut=2027-01-31&rooms=1&adults=4&children=0"
+        target_url = "https://www.agoda.com/zh-tw/search?city=19741&checkIn=2027-01-30&checkOut=2027-01-31&rooms=1&adults=4&children=0"
         
         page.goto(target_url, timeout=60000)
         
